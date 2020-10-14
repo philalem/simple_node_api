@@ -1,0 +1,19 @@
+{
+  "name": "simple_node_api",
+  "version": "1.0.0",
+  "description": "a node api that will do some crud methods",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/philalem/simple_node_api.git"
+  },
+  "author": "Phillip",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/philalem/simple_node_api/issues"
+  },
+  "homepage": "https://github.com/philalem/simple_node_api#readme"
+}
