@@ -1,0 +1,20 @@
+{
+  "name": {
+    "first": "Phillip",
+    "middle": "coder",
+    "last": "LeMaster"
+  },
+  "address": {
+    "street": "1234 somewhere st",
+    "city": "somewhere",
+    "state": "VA",
+    "zip": "12345"
+  },
+  "phone": [
+    {
+      "number": "123-099-7890",
+      "type": "mobile"
+    }
+  ],
+  "email": "phillip@example.com"
+}
