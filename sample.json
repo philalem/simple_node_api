@@ -1,0 +1,20 @@
+{
+  "name": {
+    "first": "Darth Vader",
+    "middle": "Anakin",
+    "last": "Skywalker"
+  },
+  "address": {
+    "street": "1234 Middle of the desert",
+    "city": "unknown",
+    "state": "Tatooine",
+    "zip": "00000"
+  },
+  "phone": [
+    {
+      "number": "123-456-7890",
+      "type": "home"
+    }
+  ],
+  "email": "darth_vader@sithlord.com"
+}
