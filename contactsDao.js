@@ -1,8 +1,14 @@
 var Datastore = require("nedb"),
   db = new Datastore({ filename: "database", autoload: true });
 
-exports.getAllContacts = async () => {
-  return db.find({});
+exports.getAllContacts = async (callback) => {
+  db.find({}, (err, docs) => {
+    if (err) {
+      console.log("error:" + err);
+      return callback(err);
+    }
+    return callback(docs);
+  });
 };
 
 exports.addContact = async (contact) => {

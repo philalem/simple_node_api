@@ -4,31 +4,29 @@ const bodyParser = require("body-parser");
 const contactsDao = require("./contactsDao");
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/contacts", (req, res) => {
   console.log("here actually");
-  contactsDao
-    .getAllContacts()
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  const writeDataToBrowser = (data) => {
+    res.send(data);
+  };
+  contactsDao.getAllContacts(writeDataToBrowser).catch((error) => {
+    console.error(error);
+    res.sendStatus(500);
+  });
 });
 
 app.post("/contacts", (req, res) => {
   console.log("here1");
-  const jsonContact = {};
+  var jsonContact = {};
   try {
     jsonContact = JSON.parse(req.body.contact);
   } catch (e) {
     jsonContact = req.body.contact;
   }
-  contactsDao
-    .addContact(jsonContact)
-    .catch((error) => console.error(error))
-    .finally(() => res.redirect("/"));
+  contactsDao.addContact(jsonContact).catch((error) => console.error(error));
+  res.sendStatus(200);
 });
 
 app.put("/contacts/:id", (req, res) => {
@@ -40,11 +38,10 @@ app.put("/contacts/:id", (req, res) => {
   } catch (e) {
     jsonContact = req.body.contact;
   }
-  contactsDao
-    .updateContact(id, jsonContact)
-    .catch((error) => console.error(error))
-    .finally(() => res.redirect("/"));
-  res.send(200);
+  contactsDao.updateContact(id, jsonContact).catch((error) => {
+    console.error(error);
+  });
+  res.sendStatus(200);
 });
 
 app.get("/contacts/:id", (req, res) => {
@@ -62,7 +59,7 @@ app.delete("/contacts/:id", (req, res) => {
   console.log("here4");
   const id = req.params.id;
   contactsDao.deleteContact(id);
-  res.send(200);
+  res.sendStatus(200);
 });
 
 app.get("/", (req, res) => {
