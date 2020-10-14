@@ -26,7 +26,7 @@ app.post("/contacts", (req, res) => {
     jsonContact = req.body.contact;
   }
   contactsDao.addContact(jsonContact).catch((error) => console.error(error));
-  res.sendStatus(200);
+  res.sendStatus(201);
 });
 
 app.put("/contacts/:id", (req, res) => {
@@ -41,7 +41,7 @@ app.put("/contacts/:id", (req, res) => {
   contactsDao.updateContact(id, jsonContact).catch((error) => {
     console.error(error);
   });
-  res.sendStatus(200);
+  res.sendStatus(201);
 });
 
 app.get("/contacts/:id", (req, res) => {
@@ -52,7 +52,10 @@ app.get("/contacts/:id", (req, res) => {
     .then((result) => {
       res.send(result);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+      res.sendStatus(500);
+    });
 });
 
 app.delete("/contacts/:id", (req, res) => {
