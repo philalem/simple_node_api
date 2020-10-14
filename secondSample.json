@@ -13,7 +13,7 @@
   "phone": [
     {
       "number": "123-099-7890",
-      "type": "mobile"
+      "phoneType": "mobile"
     }
   ],
   "email": "phillip@example.com"

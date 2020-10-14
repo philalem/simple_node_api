@@ -13,7 +13,11 @@
   "phone": [
     {
       "number": "123-456-7890",
-      "type": "home"
+      "phoneType": "home"
+    },
+    {
+      "number": "553-456-7890",
+      "phoneType": "mobile"
     }
   ],
   "email": "darth_vader@sithlord.com"

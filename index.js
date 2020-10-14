@@ -2,12 +2,52 @@ var express = require("express");
 var app = express();
 const bodyParser = require("body-parser");
 const contactsDao = require("./contactsDao");
+var Validator = require("jsonschema").Validator;
+var v = new Validator();
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+var ContactSchema = {
+  id: "/Contact",
+  type: "object",
+  required: ["name", "address", "phone", "email"],
+  properties: {
+    name: {
+      type: "object",
+      required: ["first", "middle", "last"],
+      properties: {
+        first: { type: "string" },
+        middle: { type: "string" },
+        last: { type: "string" },
+      },
+    },
+    address: {
+      type: "object",
+      required: ["street", "city", "state", "zip"],
+      properties: {
+        street: { type: "string" },
+        city: { type: "string" },
+        state: { type: "string" },
+        zip: { type: "string" },
+      },
+    },
+    phone: {
+      type: "array",
+      required: ["number", "type"],
+      items: {
+        number: { type: "string" },
+        phoneType: {
+          type: "string",
+          enum: ["home", "work", "mobile"],
+        },
+      },
+    },
+    email: { type: "string" },
+  },
+};
+
 app.get("/contacts", (req, res) => {
-  console.log("here actually");
   const writeDataToBrowser = (data) => {
     res.send(data);
   };
@@ -18,19 +58,21 @@ app.get("/contacts", (req, res) => {
 });
 
 app.post("/contacts", (req, res) => {
-  console.log("here1");
   var jsonContact = {};
   try {
     jsonContact = JSON.parse(req.body.contact);
   } catch (e) {
     jsonContact = req.body.contact;
   }
-  contactsDao.addContact(jsonContact).catch((error) => console.error(error));
-  res.sendStatus(201);
+  if (v.validate(jsonContact, ContactSchema).valid) {
+    contactsDao.addContact(jsonContact).catch((error) => console.error(error));
+    res.sendStatus(201);
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 app.put("/contacts/:id", (req, res) => {
-  console.log("here2");
   const id = req.params.id;
   var jsonContact = {};
   try {
@@ -38,14 +80,17 @@ app.put("/contacts/:id", (req, res) => {
   } catch (e) {
     jsonContact = req.body.contact;
   }
-  contactsDao.updateContact(id, jsonContact).catch((error) => {
-    console.error(error);
-  });
-  res.sendStatus(201);
+  if (v.validate(jsonContact, ContactSchema).valid) {
+    contactsDao.updateContact(id, jsonContact).catch((error) => {
+      console.error(error);
+    });
+    res.sendStatus(201);
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 app.get("/contacts/:id", (req, res) => {
-  console.log("here3");
   const contactId = req.params.id;
   return contactsDao
     .getContact(contactId)
@@ -59,7 +104,6 @@ app.get("/contacts/:id", (req, res) => {
 });
 
 app.delete("/contacts/:id", (req, res) => {
-  console.log("here4");
   const id = req.params.id;
   contactsDao.deleteContact(id);
   res.sendStatus(200);
