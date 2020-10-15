@@ -60,9 +60,9 @@ app.get("/contacts", (req, res) => {
 app.post("/contacts", (req, res) => {
   var jsonContact = {};
   try {
-    jsonContact = JSON.parse(req.body.contact);
+    jsonContact = JSON.parse(req.body);
   } catch (e) {
-    jsonContact = req.body.contact;
+    jsonContact = req.body;
   }
   if (v.validate(jsonContact, ContactSchema).valid) {
     contactsDao.addContact(jsonContact).catch((error) => console.error(error));
@@ -76,9 +76,9 @@ app.put("/contacts/:id", (req, res) => {
   const id = req.params.id;
   var jsonContact = {};
   try {
-    jsonContact = JSON.parse(req.body.contact);
+    jsonContact = JSON.parse(req.body);
   } catch (e) {
-    jsonContact = req.body.contact;
+    jsonContact = req.body;
   }
   if (v.validate(jsonContact, ContactSchema).valid) {
     contactsDao.updateContact(id, jsonContact).catch((error) => {
@@ -92,11 +92,11 @@ app.put("/contacts/:id", (req, res) => {
 
 app.get("/contacts/:id", (req, res) => {
   const contactId = req.params.id;
+  const writeDataToBrowser = (data) => {
+    res.send(data);
+  };
   return contactsDao
-    .getContact(contactId)
-    .then((result) => {
-      res.send(result);
-    })
+    .getContact(contactId, writeDataToBrowser)
     .catch((error) => {
       console.error(error);
       res.sendStatus(500);
@@ -113,6 +113,8 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log("Server running on port 3000");
 });
+
+module.exports = { app, server };

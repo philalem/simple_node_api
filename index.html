@@ -5,11 +5,22 @@
     <title>Node.js API</title>
     <script>
       const handlePost = async () => {
+        const contactString = document.getElementById("postFormContact").value;
+        await fetch("http://localhost:3000/contacts", {
+          method: "POST",
+          body: JSON.stringify(contactString),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        return false;
+      };
+      const handlePut = async () => {
         const contactString = document.getElementById("putFormContact").value;
         const contactId = document.getElementById("putFormId").value;
         await fetch("http://localhost:3000/contacts/" + contactId.toString(), {
           method: "PUT",
-          body: JSON.stringify({ contact: contactString }),
+          body: JSON.stringify(contactString),
           headers: {
             "Content-Type": "application/json",
           },
@@ -32,17 +43,18 @@
   <body>
     <h1>Hello, Node.js API!</h1>
     <h2>This form will add a contact (post) in our /contacts resource</h2>
-    <form name="postForm" action="/contacts" method="POST">
+    <form name="postForm" action="javascript:handlePost();">
       <input
         type="json"
         placeholder="Paste the json contact here"
+        id="postFormContact"
         name="contact"
       />
       <button type="submit">POST</button>
     </form>
 
     <h2>This form will update a contact (put) in our /contacts resource</h2>
-    <form name="putForm" action="javascript:handlePost();">
+    <form name="putForm" action="javascript:handlePut();">
       <input
         type="json"
         placeholder="Paste the contact id here"
