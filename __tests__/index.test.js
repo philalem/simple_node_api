@@ -70,6 +70,7 @@ describe("server-api", () => {
 
     expect(afterEntriesCount).toEqual(beforeEntriesCount + 2);
   });
+
   it("POST /contacts", async () => {
     const res = await request(app).get("/contacts");
     const beforeCount = res.body.length;
@@ -79,6 +80,7 @@ describe("server-api", () => {
 
     expect(afterCount).toEqual(beforeCount + 1);
   });
+
   it("PUT /contacts/:id", async () => {
     const res = await request(app).get("/contacts");
     const beforeCount = res.body.length;
@@ -94,6 +96,7 @@ describe("server-api", () => {
 
     expect(actualContact).toEqual(expectedContact);
   });
+
   it("GET /contacts/:id", async () => {
     const res = await request(app).get("/contacts");
     const beforeCount = res.body.length;
@@ -103,6 +106,7 @@ describe("server-api", () => {
 
     expect(response.body).toEqual(expectedContact);
   });
+
   it("DELETE /contacts/:id", async () => {
     const res = await request(app).get("/contacts");
     const beforeCount = res.body.length;
