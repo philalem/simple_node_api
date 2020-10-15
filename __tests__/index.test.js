@@ -62,24 +62,13 @@ afterAll(async (done) => {
 describe("server-api", () => {
   it("GET /contacts", async () => {
     const res = await request(app).get("/contacts");
-    const entries = res.body;
-    let expectedContact = entries.find(
-      (o) =>
-        o.name === defaultContact.name &&
-        o.address === defaultContact.address &&
-        o.phone === defaultContact.phone &&
-        o.email === defaultContact.email
-    );
-    let otherExpectedContact = entries.find(
-      (o) =>
-        o.name === contactToInsert.name &&
-        o.address === contactToInsert.address &&
-        o.phone === contactToInsert.phone &&
-        o.email === contactToInsert.email
-    );
+    const beforeEntriesCount = res.body.length;
+    db.insert(defaultContact);
+    db.insert(contactToInsert);
+    const result = await request(app).get("/contacts");
+    const afterEntriesCount = result.body.length;
 
-    expect(expectedContact).toEqual(defaultContact);
-    expect(otherExpectedContact).toEqual(contactToInsert);
+    expect(afterEntriesCount).toEqual(beforeEntriesCount + 2);
   });
   it("POST /contacts", async () => {
     const res = await request(app).get("/contacts");
